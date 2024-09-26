@@ -6,6 +6,7 @@ The core ideas
 - Each user of a workspace has a local database with the same schema
 - The local db schema is synced with the remote schema based on what the user has access to
 - The remote db has an extensive list of "commands" that is an exhaustive list of all actions that has been taken by all users
+- Commands are "append only" in their definition but the side effects of commands can be changed
 
 ## Commands
 
