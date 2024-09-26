@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -22,13 +22,13 @@ dependencies:
     version: 5.58.0(@tanstack/react-query@5.56.2)(react@18.3.1)
   '@trpc/client':
     specifier: next
-    version: 11.0.0-rc.532(@trpc/server@11.0.0-rc.532)
+    version: 11.0.0-rc.530(@trpc/server@11.0.0-rc.530)
   '@trpc/react-query':
     specifier: next
-    version: 11.0.0-rc.532(@tanstack/react-query@5.56.2)(@trpc/client@11.0.0-rc.532)(@trpc/server@11.0.0-rc.532)(react-dom@18.3.1)(react@18.3.1)
+    version: 11.0.0-rc.530(@tanstack/react-query@5.56.2)(@trpc/client@11.0.0-rc.530)(@trpc/server@11.0.0-rc.530)(react-dom@18.3.1)(react@18.3.1)
   '@trpc/server':
     specifier: next
-    version: 11.0.0-rc.532
+    version: 11.0.0-rc.530
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -913,32 +913,32 @@ packages:
     resolution: {integrity: sha512-PBu00mtt95jbKFi6Llk9aik8bnR3tR/oQP1o3TSi+iG//+Q2RTIzCEgKkHG8BB86kxMNW6O8wku+Lmi+QFR6jA==}
     dev: false
 
-  /@trpc/client@11.0.0-rc.532(@trpc/server@11.0.0-rc.532):
-    resolution: {integrity: sha512-uQRaZbT/dYbp+kP0F8oLJTRHR7esy/Va4++GfnIBaTckLUjwLMe0QWeME+7hp6/ENmpotYGQtRB30DgbnML+8w==}
+  /@trpc/client@11.0.0-rc.530(@trpc/server@11.0.0-rc.530):
+    resolution: {integrity: sha512-a6f9BP8WhRsFylhSytDhC3FxWdDDTcTduFU68sCAutDVvq3+OVV4Zpq0GJPuOjiop6oUPW1B2rWp0vGn6nqi9g==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.532+476db0d8c
+      '@trpc/server': 11.0.0-rc.530+d1e8f33f6
     dependencies:
-      '@trpc/server': 11.0.0-rc.532
+      '@trpc/server': 11.0.0-rc.530
     dev: false
 
-  /@trpc/react-query@11.0.0-rc.532(@tanstack/react-query@5.56.2)(@trpc/client@11.0.0-rc.532)(@trpc/server@11.0.0-rc.532)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-5pC/iZRuqolxPm0KiooVqUqgG2zfQFsTb4UYMt7W/L5hMWAW54N48la6o2+tct/h+V5m9fT4G9/qbtVNmqSezg==}
+  /@trpc/react-query@11.0.0-rc.530(@tanstack/react-query@5.56.2)(@trpc/client@11.0.0-rc.530)(@trpc/server@11.0.0-rc.530)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-K3Z3JqFaIG7eZJOeC4GEpL8I44Z2yjZJmTKRjBCGU6pH9Nh30LZ+js9s3tw5GE7FXn7f8V/lWmm8KtWMUXseOw==}
     peerDependencies:
       '@tanstack/react-query': ^5.54.1
-      '@trpc/client': 11.0.0-rc.532+476db0d8c
-      '@trpc/server': 11.0.0-rc.532+476db0d8c
+      '@trpc/client': 11.0.0-rc.530+d1e8f33f6
+      '@trpc/server': 11.0.0-rc.530+d1e8f33f6
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
     dependencies:
       '@tanstack/react-query': 5.56.2(react@18.3.1)
-      '@trpc/client': 11.0.0-rc.532(@trpc/server@11.0.0-rc.532)
-      '@trpc/server': 11.0.0-rc.532
+      '@trpc/client': 11.0.0-rc.530(@trpc/server@11.0.0-rc.530)
+      '@trpc/server': 11.0.0-rc.530
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@trpc/server@11.0.0-rc.532:
-    resolution: {integrity: sha512-DhlNzpSS5VlliHXL8hH12cydUtRWbCE2Uk1Q+wTmKi1PlUwM4EPXwagBDt2KpVhiZ4AXHtdfoPhwo6h7So6O+g==}
+  /@trpc/server@11.0.0-rc.530:
+    resolution: {integrity: sha512-pFkI7x+rqbnrmI5ELIGTNempk+ShKYV9/RJSOqseIBDECJG9HM/U6nure0bVKZ1XsIC0c8WbCqluDy/kjJsf0Q==}
     dev: false
 
   /@types/cookie@0.6.0:

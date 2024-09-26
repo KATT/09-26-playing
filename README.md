@@ -1,24 +1,44 @@
-# tRPC + Server-sent Events (SSE)
+# Alex playing around with local first
 
-This example showcases the use of `httpSubscriptionLink` to facilitate `.useSubscription` via [Server-sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+The core ideas
 
-Try demo http://sse.trpc.io/
+- One SQLite database per workspace that exists on the remote server
+- Each user has a local database with the same schema
+- The local db schema is synced with the remote schema based on what the user has access to
+- The remote db has an extensive list of "commands" that is an exhaustive list of all actions that has been taken by all users
 
-## Code
+## Commands
 
-This project includes 2 examples of the subscription pattern:
+```mermaid
+sequenceDiagram
+    participant RDB as Remote DB
+    participant CS as Command Stream
+    participant LDB1 as Local DB (User 1)
+    participant LDB2 as Local DB (User 2)
 
-1. Simple example of `whoIsTyping`
-2. A slightly more involved example of `livePosts`
+    Note over RDB,LDB2: Initial Setup
+    RDB->>LDB1: Sync schema
+    RDB->>LDB2: Sync schema
 
-- Hooks for both cases (using `trpc.{x}.useSubscription`) can be found in [`/src/app/channels/[channelId]/hooks.ts`](examples/next-sse-chat/src/app/channels/[channelId]/hooks.ts)
-- The `EventEmitter` & `whoIsTyping` subscription route can be found in [`/src/server/routers/channel.ts`](examples/next-sse-chat/src/server/routers/channel.ts)
-- The more complex `post` subscription route can be found in [`/src/server/routers/post.ts:79`](examples/next-sse-chat/src/server/routers/post.ts)
+    Note over RDB,LDB2: Ongoing Sync Process
+    RDB->>CS: Broadcast new commands
+    CS->>CS: Filter and sort commands
+    CS->>LDB1: Send relevant commands (if user has access)
+    CS->>LDB2: Send relevant commands (if user has access)
+    LDB1->>LDB1: Apply commands
+    LDB2->>LDB2: Apply commands
+    Note over LDB1,CS: User 1 makes changes
+    LDB1->>LDB1: Update local DB
+    LDB1->>CS: Send new command
+    CS->>RDB: Update Remote DB
+    CS->>LDB2: Send command to User 2
+    LDB2->>LDB2: Update local DB
 
-## Features
+    Note over CS,LDB2: User 2 added to a channel or a new document
+    CS->>LDB2: Send "User 2 added to channel" command
+    LDB2->>LDB2: Recognize need for full sync
+    LDB2->>RDB: Request full sync of channel
+    RDB->>LDB2: Send complete channel data
+    LDB2->>LDB2: Perform full sync of channel
 
-- 🧙‍♂️ E2E type safety with [tRPC](https://trpc.io)
-- ⚡ Full-stack React with Next.js
-- ⚡ Server-Sent-Events / Subscription support
-- ⚡ Database with [Drizzle](https://orm.drizzle.team/)
-- 🔐 Authorization using [next-auth](https://next-auth.js.org/)
+```
