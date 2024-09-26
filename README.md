@@ -11,36 +11,58 @@ The core ideas
 
 ```mermaid
 sequenceDiagram
-    participant RDB as Remote DB
+    participant RDB as Remote Database
     participant CS as Command Stream
-    participant LDB1 as Local DB (User 1)
-    participant LDB2 as Local DB (User 2)
+    participant LDB1 as Local DB (User A)
+    participant LDB2 as Local DB (User B)
 
-    Note over RDB,LDB2: Initial Setup
-    RDB->>LDB1: Sync schema
-    RDB->>LDB2: Sync schema
+    Note over RDB,LDB2: **Initial Setup with Versioning**
+    RDB-->>LDB1: Sync schema v1.0 and initial data
+    RDB-->>LDB2: Sync schema v1.0 and initial data
 
-    Note over RDB,LDB2: Ongoing Sync Process
-    RDB->>CS: Broadcast new commands
-    CS->>CS: Filter and sort commands
-    CS->>LDB1: Send relevant commands (if user has access)
-    CS->>LDB2: Send relevant commands (if user has access)
-    LDB1->>LDB1: Apply commands
-    LDB2->>LDB2: Apply commands
-    Note over LDB1,CS: User 1 makes changes
-    LDB1->>LDB1: Update local DB
-    LDB1->>CS: Send new command
-    CS->>RDB: Update Remote DB
-    CS->>LDB2: Send command to User 2
-    LDB2->>LDB2: Update local DB
+    Note over RDB,LDB2: **Ongoing Sync with Command Compaction**
+    RDB->>CS: Broadcast new commands (compacted)
+    CS->>CS: Filter, sort, and batch commands
+    CS-->>LDB1: Send relevant commands (compressed)
+    CS-->>LDB2: Send relevant commands (compressed)
+    LDB1->>LDB1: Apply commands with conflict resolution
+    LDB2->>LDB2: Apply commands with conflict resolution
 
-    Note over CS,LDB2: User 2 added to a channel or a new document
-    CS->>LDB2: Send "User 2 added to channel" command
-    LDB2->>LDB2: Recognize need for full sync of thischannel
-    LDB2->>RDB: Request full sync of channel
-    RDB->>LDB2: Stream complete channel data
-    LDB2->>LDB2: Perform full sync of channel
+    Note over LDB1,CS: **User A Works Offline**
+    LDB1->>LDB1: Queue commands locally
+    LDB1-->>CS: Sync commands upon reconnection
+    CS->>RDB: Update Remote DB with conflict handling
+    CS-->>LDB2: Distribute User A's commands
+    LDB2->>LDB2: Apply incoming commands
 
+    Note over CS,LDB2: **User B Added to New Channel**
+    CS-->>LDB2: Notify about new channel access
+    LDB2->>LDB2: Detect need for data sync
+    LDB2->>RDB: Request incremental channel data
+    RDB-->>LDB2: Stream channel data (incremental)
+    LDB2->>LDB2: Apply new channel data
+
+```
+
+### Enahanced Data Flow Diagram
+
+```mermaid
+flowchart LR
+    subgraph Remote Server
+        RDB[(Remote Database)]
+        CS[Command Stream]
+    end
+    subgraph User Devices
+        LDB1[(Local DB User A)]
+        LDB2[(Local DB User B)]
+    end
+
+    RDB --> CS
+    CS -->|Batched Commands| LDB1 & LDB2
+    LDB1 -->|Local Changes| LDB1
+    LDB1 -->|Queued Commands| CS
+    CS --> RDB
+    RDB -->|Schema Updates| LDB1 & LDB2
 ```
 
 ## Command Schema
